@@ -1,0 +1,12 @@
+{
+  "name": "stickierHeaders",
+  "version": "0.9.0",
+  "dependencies": {},
+  "devDependencies": {
+    "jquery": "~2",
+    "mocha": "^2.4.5",
+    "chai": "^3.5.0",
+    "chai-jquery": "^2.0.1",
+    "sinon": "http://sinonjs.org/releases/sinon-1.17.3.js"
+  }
+}
