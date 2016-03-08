@@ -18,23 +18,29 @@ module.exports = function(grunt) {
     clean: {
       files: ['dist']
     },
-    concat: {
-      options: {
-        banner: '<%= banner %>',
-        stripBanners: true
-      },
-      dist: {
-        src: ['src/<%= pkg.name %>.js'],
-        dest: 'build/jquery.<%= pkg.name %>.js'
-      }
-    },
     babel: {
       options: {
         sourceMap: true,
         presets: ['es2015']
       },
       dist: {
-        src: 'build/jquery.<%= pkg.name %>.js',
+        src: ['src/<%= pkg.name %>.js'],
+        dest: 'tmp/<%= pkg.name %>.js'
+      }
+    },
+    preprocess: {
+      js: {
+        src: ['src/build.js'],
+        dest: 'tmp/jquery.<%= pkg.name %>.js'
+      }
+    },
+    concat: {
+      options: {
+        banner: '<%= banner %>',
+        stripBanners: true
+      },
+      dist: {
+        src: ['<%= babel.dist.dest %>'],
         dest: 'dist/jquery.<%= pkg.name %>.js'
       }
     },
@@ -70,7 +76,7 @@ module.exports = function(grunt) {
         options: {
           jshintrc: 'src/.jshintrc'
         },
-        src: ['src/**/*.js']
+        src: ['src/stickierHeaders.js']
       },
       test: {
         options: {
@@ -103,14 +109,12 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.loadNpmTasks('grunt-mocha');
-
   // Default task.
-  grunt.registerTask('default', ['jshint', 'connect', 'mocha', 'clean', 'concat', 'babel', 'uglify']);
+  grunt.registerTask('default', ['jshint', 'connect', 'sass', 'clean',  'babel', 'preprocess', 'mocha', 'concat', 'uglify']);
   grunt.registerTask('server', function() {
     grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server.');
     grunt.task.run(['serve']);
   });
   grunt.registerTask('serve', ['connect', 'watch']);
-  grunt.registerTask('test', ['jshint', 'connect', 'mocha']);
+  grunt.registerTask('test', ['jshint', 'connect', 'babel', 'preprocess', 'mocha']);
 };
